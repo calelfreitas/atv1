@@ -1,0 +1,57 @@
+import random
+import time  
+
+nomes = ["Paulo", "Ana", "Carlos", "Luana"]
+cargos = ["Gerente", "Analista", "Assistente", "Secretaria"]
+nivel = ["Junior", "Pleno", "Senior"]
+tempo = [2, 4, 6, 8]
+ids = []
+
+def generate_registro():
+    idfunc = random.randint(1, 100000)
+    while idfunc in ids:
+        idfunc = random.randint(1, 100000)
+
+    ids.append(idfunc)
+    nome = random.choice(nomes)
+    cargo = random.choice(cargos)
+    salario = round(random.uniform(2500.0, 16000.0), 2)
+    temp = random.choice(nivel)
+    return {
+        "id": idfunc,
+        "nome": nome,
+        "cargo": cargo,
+        "salário": salario,
+        "tempo": tempo,
+        "nível": nivel
+    }
+
+def caltotalsalarios(lista_registros):
+    totalsalarios = sum(registro["salário"] for registro in lista_registros)
+    return totalsalarios
+
+def registroremover(lista_registros, numregistros):
+    if numregistros > len(lista_registros):
+        return "Número de registros a serem removidos é maior que todos os registros somados!"
+    registros_novos = lista_registros[:-numregistros]
+    return registros_novos
+
+registros = [generate_registro() for _ in range(40000)]
+
+for registro in registros:
+    print(registro)
+
+tempoinicial1 = time.time()
+totalsalarios = caltotalsalarios(registros)
+tempofinal1 = time.time()
+print(f'Total dos salários é: R${totalsalarios:.2f}')
+print(f'Tempo para calcular os salários é de: {tempofinal1 - tempoinicial1} seg')
+
+registros = registroremover(registros, 12000)
+
+print(f'Restam {len(registros)} registros')
+tempoinicial2 = time.time()
+totalsalarios = caltotalsalarios(registros)
+tempofinal2 = time.time()
+print(f'Total dos salários é: R$ {totalsalarios:.2f}')
+print(f'Tempo para calcular os salários é de: {tempofinal2 - tempoinicial2} seg')
